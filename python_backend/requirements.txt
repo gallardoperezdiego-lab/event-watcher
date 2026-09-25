@@ -1,0 +1,5 @@
+# Event Watcher needs NO packages to run: it uses only the Python standard library.
+#
+# These are only needed to BUILD the stand-alone EventWatcher.exe / EventWatcher.app:
+pyinstaller>=6.5
+certifi>=2024.2.2   # up-to-date HTTPS certificates bundled into the packaged app

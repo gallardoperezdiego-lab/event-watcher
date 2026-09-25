@@ -1,0 +1,65 @@
+# Builds EventWatcher.exe (Windows) and EventWatcher.app (Mac), runs the self-tests on both,
+# and publishes them on the Releases page. Runs when a version tag like v1.2.0 is pushed,
+# or manually from the Actions tab (then the apps are attached to the run as downloads).
+name: Build apps
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: EventWatcher-windows
+          - os: macos-latest
+            artifact: EventWatcher-mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Self-tests
+        working-directory: python_backend
+        run: python -m unittest discover -s tests -v
+      - name: Build app
+        working-directory: python_backend
+        run: |
+          pip install -r requirements.txt
+          pyinstaller --noconfirm --distpath ../release EventWatcher.spec
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: Copy-Item release/EventWatcher.exe EventWatcher.exe
+      - name: Package (Mac)
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent release/EventWatcher.app EventWatcher-mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            EventWatcher.exe
+            EventWatcher-mac.zip
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" EventWatcher.exe EventWatcher-mac.zip \
+            --repo "$GITHUB_REPOSITORY" --title "Event Watcher $GITHUB_REF_NAME" \
+            --notes "Download **EventWatcher.exe** for Windows or **EventWatcher-mac.zip** for Mac. See the README for first-launch steps."

@@ -1,0 +1,16 @@
+# Built apps are published on the GitHub Releases page, not stored in the code
+release/
+
+# Downloaded packages and build leftovers
+web/node_modules/
+python_backend/build/
+python_backend/venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Secrets and personal data never belong in the project
+.env
+.env.*
+*.db
+*.db-journal

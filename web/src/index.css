@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/* Aurora design tokens ("Midnight Stone"). Fonts are bundled with the app (see main.tsx),
+   so nothing is ever loaded from the internet. */
+@theme inline {
+  --font-serif: "Playfair Display Variable", ui-serif, Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Geist Variable", "Inter Variable", ui-sans-serif, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", monospace;
+
+  --color-page: var(--page);
+  --color-rail: var(--rail);
+  --color-bar: var(--bar);
+  --color-card: var(--card);
+  --color-raised: var(--raised);
+  --color-well: var(--well);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
+  --color-edge: var(--edge);
+  --color-line: var(--line);
+  --color-field: var(--field);
+  --color-field-edge: var(--field-edge);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-ink3: var(--ink3);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-edge: var(--accent-edge);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-err: var(--err);
+  --color-err-soft: var(--err-soft);
+  --color-err-edge: var(--err-edge);
+  --color-steel: var(--steel);
+}
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #131313; --rail: #161616; --bar: rgba(19, 19, 19, 0.86);
+  --card: #1e1e1e; --raised: #201f1f; --well: #0e0e0e; --hover: #2a2a2a; --active: #2a2a2a;
+  --edge: #1a2632; --line: #26292d; --field: #0e0e0e; --field-edge: #5f656d;
+  --ink: #e5e2e1; --ink2: #c1c7d0; --ink3: #9e9e9e;
+  --accent: #96ccff; --on-accent: #003353; --accent-soft: rgba(150, 204, 255, 0.08); --accent-edge: rgba(150, 204, 255, 0.32);
+  --ok: #abcdcd; --ok-soft: rgba(171, 205, 205, 0.1);
+  --err: #ffb4ab; --err-soft: rgba(255, 180, 171, 0.08); --err-edge: rgba(255, 180, 171, 0.32);
+  --steel: rgba(176, 196, 222, 0.4);
+  --card-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  --pop-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 24px rgba(150, 204, 255, 0.15);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --mesh: radial-gradient(ellipse at top, rgba(150, 204, 255, 0.05), #131313 55%, #131313);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --page: #f4f3f0; --rail: #eeede9; --bar: rgba(244, 243, 240, 0.88);
+  --card: #ffffff; --raised: #f7f6f3; --well: #f4f3f0; --hover: #e9e8e4; --active: #e3e8ee;
+  --edge: #e0e2e6; --line: #e4e5e7; --field: #ffffff; --field-edge: #8a9098;
+  --ink: #1b1c1d; --ink2: #41474f; --ink3: #5b6068;
+  --accent: #206393; --on-accent: #ffffff; --accent-soft: #edf4fb; --accent-edge: #a9c9e6;
+  --ok: #2f6464; --ok-soft: #e4efee;
+  --err: #b3261e; --err-soft: #fcedeb; --err-edge: #efb8b2;
+  --steel: rgba(32, 99, 147, 0.45);
+  --card-shadow: 0 1px 2px rgba(20, 30, 40, 0.05);
+  --pop-shadow: 0 12px 32px rgba(20, 30, 40, 0.18);
+  --glow: 0 1px 2px rgba(32, 99, 147, 0.25);
+  --scrim: rgba(20, 24, 28, 0.35);
+  --mesh: radial-gradient(ellipse at top, rgba(32, 99, 147, 0.06), #f4f3f0 55%, #f4f3f0);
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image: var(--mesh);
+    background-attachment: fixed;
+    margin: 0;
+  }
+  a {
+    color: var(--accent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  ::placeholder {
+    color: var(--ink3);
+    opacity: 1;
+  }
+  input[type="checkbox"] {
+    accent-color: var(--accent);
+  }
+}
+
+@layer components {
+  /* Surfaces */
+  .ew-card {
+    background: var(--card);
+    border: 1px solid var(--edge);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .ew-well {
+    background: var(--well);
+    border: 1px solid var(--edge);
+    border-radius: 12px;
+  }
+  /* Form fields */
+  .ew-field {
+    height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 14px;
+    background: var(--field);
+    border: 1px solid var(--field-edge);
+    border-radius: 12px;
+    color: var(--ink);
+    font: 400 14px/1.2 var(--font-sans);
+    outline: none;
+  }
+  select.ew-field {
+    padding: 0 12px;
+  }
+  .ew-field:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .ew-label {
+    font: 500 14px/1.3 var(--font-sans);
+    color: var(--ink);
+  }
+  .ew-help {
+    font: 400 13px/1.5 var(--font-sans);
+    color: var(--ink3);
+  }
+  /* Uppercase section tag */
+  .ew-caps {
+    font: 600 12px/1 var(--font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink3);
+  }
+  .ew-stat {
+    font: 600 28px/1 var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .ew-spin {
+    animation: ew-spin 1s linear infinite;
+  }
+}
+
+@keyframes ew-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
